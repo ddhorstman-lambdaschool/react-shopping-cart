@@ -16,15 +16,13 @@ function App() {
   const [cart, setCart] = useLocalStorage("cart", []);
 
   const addItem = (item) => {
+    //no duplicate items - for now
+    if (cart.find((x) => x.id === item.id)) return;
     setCart([...cart, item]);
   };
 
-  const removeItem = (idxToRemove) => {
-    const newCart = [];
-    for (let i = 0; i < cart.length; i++) {
-      if (i !== idxToRemove) newCart.push(cart[i]);
-    }
-    setCart(newCart);
+  const removeItem = (id) => {
+    setCart(cart.filter((x) => x.id !== id));
   };
 
   return (

@@ -1,13 +1,14 @@
 import React from "react";
 export default function useLocalStorage(key, initialValue) {
+  const initFromStorage = window.localStorage.getItem(key);
   const [value, setValue] = React.useState(() =>
-    JSON.parse(window.localStorage.getItem(key) ?? JSON.stringify(initialValue))
+    JSON.parse(initFromStorage ?? JSON.stringify(initialValue))
   );
-  window.localStorage.setItem(key, JSON.stringify(initialValue));
+
+  if (initFromStorage === null || initFromStorage === undefined)
+    window.localStorage.setItem(key, JSON.stringify(initialValue));
+
   const setValueLocalStorage = (newValue) => {
-    console.log("key: ", key);
-    console.log("newValue: ", newValue);
-    console.log("stringified",JSON.stringify(newValue));
     window.localStorage.setItem(key, JSON.stringify(newValue));
     setValue(newValue);
   };
