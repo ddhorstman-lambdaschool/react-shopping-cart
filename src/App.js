@@ -14,20 +14,42 @@ import CartContext from "./contexts/CartContext";
 function App() {
   const [products] = React.useState(data);
   const [cart, setCart] = useLocalStorage("cart", []);
-
   const addItem = (item) => {
     //no duplicate items - for now
-    if (cart.find((x) => x.id === item.id)) return;
-    setCart([...cart, item]);
+    if (cart.find((x) => x.id === item.id)) {
+      setCart(
+        cart.map((x) =>
+          x.id !== item.id ? x : { ...x, quantity: (x.quantity ?? 1) + 1 }
+        )
+      );
+    } else {
+      setCart([...cart, item]);
+    }
   };
 
   const removeItem = (id) => {
     setCart(cart.filter((x) => x.id !== id));
   };
 
+  const updateQuantity = (id) => (qty) => {
+    console.log(id, qty);
+    if (qty === 0) removeItem(id);
+    else
+      setCart(
+        cart.map((x) =>
+          x.id !== id
+            ? x
+            : {
+                ...x,
+                quantity: qty,
+              }
+        )
+      );
+  };
+
   return (
     <ProductContext.Provider value={{ products, addItem }}>
-      <CartContext.Provider value={{ cart, removeItem }}>
+      <CartContext.Provider value={{ cart, removeItem, updateQuantity }}>
         <div className="App">
           <Navigation />
 

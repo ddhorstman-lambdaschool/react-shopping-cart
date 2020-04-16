@@ -8,7 +8,8 @@ const Navigation = () => {
     <div className="navigation">
       <NavLink to="/">Products</NavLink>
       <NavLink to="/cart">
-        Cart <span>{cart.length}</span>
+        Cart{" "}
+        <span>{cart.reduce((ac, val) => ac + (val.quantity ?? 1), 0)}</span>
       </NavLink>
     </div>
   );
